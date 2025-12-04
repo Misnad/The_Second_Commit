@@ -3,267 +3,402 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IdeaWall - Hackathon Ideas</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>IdeaWall - Make-A-Ton 8.0</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Outfit:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Inlined CSS so this single file works standalone -->
+    <style>
+      :root {
+        --bg: #f4f6f8;
+        --card-w: 260px;
+        --card-h: auto;
+        --pin-size: 14px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: linear-gradient(180deg, #eef2f6 0%, var(--bg) 100%);
+        color: #0f1724;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      header {
+        text-align: center;
+        padding: 28px 16px 8px;
+      }
+
+      .logo h1 {
+        margin: 0;
+        font-size: 1.6rem;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+      }
+
+      .tagline {
+        margin: 6px 0 0;
+        font-size: 0.95rem;
+        color: #475569;
+      }
+
+      main {
+        padding: 18px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .idea-wall {
+        width: 1100px;
+        max-width: calc(100% - 40px);
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><g fill="%23ffffff" opacity="0.03"><rect width="80" height="80" rx="6"/></g></svg>') repeat;
+        border-radius: 14px;
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(2,6,23,0.08);
+      }
+
+      .board {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+        gap: 18px;
+        justify-items: center;
+        align-items: start;
+      }
+
+      .idea-card {
+        --rotation: 0deg;
+        --hue: 210;
+        width: var(--card-w);
+        min-height: 150px;
+        background: linear-gradient(180deg, hsl(var(--hue) 80% 95%) 0%, hsl(var(--hue) 80% 88%) 100%);
+        border-radius: 10px;
+        padding: 16px 16px 14px;
+        transform: rotate(var(--rotation));
+        box-shadow: 0 6px 18px rgba(6, 12, 34, 0.08);
+        position: relative;
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .idea-card:hover {
+        transform: rotate(calc(var(--rotation) * 1.05)) translateY(-6px);
+        box-shadow: 0 18px 36px rgba(6, 12, 34, 0.12);
+      }
+
+      .pin {
+        position: absolute;
+        top: -8px;
+        left: 18px;
+        width: var(--pin-size);
+        height: var(--pin-size);
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fff 0%, rgba(255,255,255,0.85) 30%, rgba(0,0,0,0.12) 100%);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+        transform: translateY(-6px);
+      }
+
+      .idea-card h3 {
+        margin: 6px 0 8px;
+        font-family: "Caveat", "Segoe UI", serif;
+        font-weight: 600;
+        font-size: 1.15rem;
+        color: #042028;
+      }
+
+      .idea-card p {
+        margin: 0 0 12px 0;
+        color: #07202a;
+        line-height: 1.35;
+        font-size: 0.95rem;
+      }
+
+      .idea-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.82rem;
+        color: #0b2f33;
+        opacity: 0.85;
+      }
+
+      footer {
+        text-align: center;
+        padding: 16px;
+        color: #475569;
+        font-size: 0.9rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 700px) {
+        .idea-wall {
+          padding: 14px;
+        }
+
+        .board {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 12px;
+        }
+
+        .logo h1 {
+          font-size: 1.3rem;
+        }
+      }
+    </style>
   </head>
+
   <body>
     <header>
       <div class="logo">
-        <h1>Make-A-Ton 8.0 IdeaWall</h1>
+        <h1>Make-A-Ton 8.0 — IdeaWall</h1>
       </div>
-      <p class="tagline">Hackathon Ideas That Could Change Everything</p>
+      <p class="tagline">Hackathon ideas that could change everything</p>
     </header>
 
     <main>
-      <div class="idea-wall">
-        <!--
-            ==========================================
-            TO ADD A NEW IDEA: Copy this template
-            ==========================================
-            
-            <div class="idea-card" style="--rotation: 0deg; --hue: 60;">
-                <div class="pin"></div>
-                <h3>Your Idea Title</h3>
-                <p>Your idea description goes here.</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Your Name</span>
-                    <span class="idea-date">Dec 3, 2025</span>
-                </div>
+      <div class="idea-wall" aria-live="polite">
+        <div class="board">
+          <!-- Template for adding new ideas:
+               <div class="idea-card" style="--rotation: 0deg; --hue: 60;">
+                 <div class="pin" aria-hidden="true"></div>
+                 <h3>Idea Title</h3>
+                 <p>Idea description goes here.</p>
+                 <div class="idea-meta">
+                   <span class="idea-author">— Name</span>
+                   <span class="idea-date">Dec 3, 2025</span>
+                 </div>
+               </div>
+          -->
+
+          <div class="idea-card" style="--rotation: -2deg; --hue: 200">
+            <div class="pin"></div>
+            <h3>AI Study Buddy</h3>
+            <p>
+              An AI that learns your study habits and creates personalized quizzes
+              from your notes. Uses spaced repetition for better retention.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Priya S.</span>
+              <span class="idea-date">Dec 3, 2025</span>
             </div>
-            
-            TIPS:
-            - rotation: try values between -4deg and 4deg
-            - hue: 0-360 (0=red, 60=yellow, 120=green, 180=cyan, 240=blue, 300=pink)
-            ==========================================
-            -->
-
-        <div class="idea-card" style="--rotation: -2deg; --hue: 200">
-          <div class="pin"></div>
-          <h3>AI Study Buddy</h3>
-          <p>
-            An AI that learns your study habits and creates personalized quizzes
-            from your notes. Uses spaced repetition for better retention.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Priya S.</span>
-            <span class="idea-date">Dec 3, 2025</span>
           </div>
-        </div>
 
-        <div class="idea-card" style="--rotation: 3deg; --hue: 340">
-          <div class="pin"></div>
-          <h3>Carbon Footprint Tracker</h3>
-          <p>
-            App that scans receipts and tracks your carbon footprint. Gamifies
-            eco-friendly choices with local leaderboards.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Marcus T.</span>
-            <span class="idea-date">Dec 3, 2025</span>
-          </div>
-        </div>
-
-        <div class="idea-card" style="--rotation: -1deg; --hue: 160">
-          <div class="pin"></div>
-          <h3>Accessible Navigation</h3>
-          <p>
-            AR navigation for visually impaired users. Uses phone camera + audio
-            cues to guide through indoor spaces like malls and airports.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Aisha K.</span>
-            <span class="idea-date">Dec 2, 2025</span>
-          </div>
-        </div>
-        <div class="idea-card" style="--rotation: -1deg; --hue: 160;">
-                <div class="pin"></div>
-                <h3>Blah Balh</h3>
-                <p>Sorry, I have no ideas.</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Misnad</span>
-                    <span class="idea-date">Dec 4, 2025</span>
-                </div>
+          <div class="idea-card" style="--rotation: 3deg; --hue: 340">
+            <div class="pin"></div>
+            <h3>Carbon Footprint Tracker</h3>
+            <p>
+              App that scans receipts and tracks your carbon footprint. Gamifies
+              eco-friendly choices with local leaderboards.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Marcus T.</span>
+              <span class="idea-date">Dec 3, 2025</span>
             </div>
-
-            <div class="idea-card" style="--rotation: 2deg; --hue: 45;">
-                <div class="pin"></div>
-                <h3>Food Waste Marketplace</h3>
-                <p>Connect restaurants with surplus food to shelters and food banks in real-time. Reduce waste, fight hunger.</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Jordan L.</span>
-                    <span class="idea-date">Dec 2, 2025</span>
-                </div>
-            </div>    
-
-        <div class="idea-card" style="--rotation: 2deg; --hue: 45">
-          <div class="pin"></div>
-          <h3>Food Waste Marketplace</h3>
-          <p>
-            Connect restaurants with surplus food to shelters and food banks in
-            real-time. Reduce waste, fight hunger.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Jordan L.</span>
-            <span class="idea-date">Dec 2, 2025</span>
           </div>
-        </div>
 
-        <div class="idea-card" style="--rotation: -3deg; --hue: 280">
-          <div class="pin"></div>
-          <h3>Mental Health Check-in Bot</h3>
-          <p>
-            Discord/Slack bot that does gentle daily check-ins, tracks mood
-            patterns, and suggests resources. Privacy-first design.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Sam R.</span>
-            <span class="idea-date">Dec 1, 2025</span>
+          <div class="idea-card" style="--rotation: -1deg; --hue: 160">
+            <div class="pin"></div>
+            <h3>Accessible Navigation</h3>
+            <p>
+              AR navigation for visually impaired users. Uses phone camera +
+              audio cues to guide through indoor spaces like malls and airports.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Aisha K.</span>
+              <span class="idea-date">Dec 2, 2025</span>
+            </div>
           </div>
-        </div>
 
-        <div class="idea-card" style="--rotation: 1deg; --hue: 100">
-          <div class="pin"></div>
-          <h3>Code Review Copilot</h3>
-          <p>
-            AI that reviews PRs for security vulnerabilities, suggests
-            optimizations, and explains complex code to junior devs.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Dev M.</span>
-            <span class="idea-date">Dec 1, 2025</span>
+          <div class="idea-card" style="--rotation: -1deg; --hue: 160;">
+            <div class="pin"></div>
+            <h3>Blah Balh</h3>
+            <p>Sorry, I have no ideas.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Misnad</span>
+              <span class="idea-date">Dec 4, 2025</span>
+            </div>
           </div>
-        </div>
 
-        <div class="idea-card" style="--rotation: -2deg; --hue: 20">
-          <div class="pin"></div>
-          <h3>Emergency Response Network</h3>
-          <p>
-            Peer-to-peer mesh network app for disaster zones when cell towers go
-            down. Share location, status, and resources.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Elena V.</span>
-            <span class="idea-date">Nov 30, 2025</span>
+          <div class="idea-card" style="--rotation: 2deg; --hue: 45;">
+            <div class="pin"></div>
+            <h3>Food Waste Marketplace</h3>
+            <p>
+              Connect restaurants with surplus food to shelters and food banks in
+              real-time. Reduce waste, fight hunger.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Jordan L.</span>
+              <span class="idea-date">Dec 2, 2025</span>
+            </div>
           </div>
-        </div>
 
-        <div class="idea-card" style="--rotation: 2deg; --hue: 220">
-          <div class="pin"></div>
-          <h3>Skill Swap Platform</h3>
-          <p>
-            Match people who want to exchange skills. You teach me guitar, I
-            teach you Python. No money involved, just learning.
-          </p>
-          <div class="idea-meta">
-            <span class="idea-author">— Chris N.</span>
-            <span class="idea-date">Nov 30, 2025</span>
+          <div class="idea-card" style="--rotation: -3deg; --hue: 280">
+            <div class="pin"></div>
+            <h3>Mental Health Check-in Bot</h3>
+            <p>
+              Discord/Slack bot that does gentle daily check-ins, tracks mood
+              patterns, and suggests resources. Privacy-first design.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Sam R.</span>
+              <span class="idea-date">Dec 1, 2025</span>
+            </div>
           </div>
-        </div>
-        <div class="idea-card" style="--rotation: -2deg; --hue: 220">
-          <div class="pin"></div>
-          <h3>Movie Recommendation system</h3>
-          <p>Recommend movies according to your watch history using AI.</p>
-          <div class="idea-meta">
-            <span class="idea-author">— Nehal</span>
-            <span class="idea-date">Dec 4, 2025</span>
+
+          <div class="idea-card" style="--rotation: 1deg; --hue: 100">
+            <div class="pin"></div>
+            <h3>Code Review Copilot</h3>
+            <p>
+              AI that reviews PRs for security vulnerabilities, suggests
+              optimizations, and explains complex code to junior devs.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Dev M.</span>
+              <span class="idea-date">Dec 1, 2025</span>
+            </div>
           </div>
-            
-            <div class="idea-card" style="--rotation: 2deg; --hue: 220;">
-                <div class="pin"></div>
-                <h3>Skill Swap Platform</h3>
-                <p>Match people who want to exchange skills. You teach me guitar, I teach you Python. No money involved, just learning.</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Chris N.</span>
-                    <span class="idea-date">Nov 30, 2025</span>
-                </div>
-            </div>
-<<<<<<< HEAD
-            <div class="idea-card" style="--rotation: 2deg; --hue: 274;">
-                <div class="pin"></div>
-                <h3>PartnerGo</h3>
-                <p>Find your Match</p>
-                <div class="idea-meta">
-                    <span class="idea-author">Tohommus</span>
-                    <span class="idea-date">Nov 30, 2025</span>
-=======
-            <div class="idea-card" style="--rotation: -1deg; --hue: 120;">
-                <div class="pin"></div>
-                <h3>AI Game</h3>
-                <p>Game for paralysed people detecting motions using neuro chips.</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Jeswin.</span>
-                    <span class="idea-date">Dec 3, 2025</span>
->>>>>>> b365b3c6b0c3a404ae1515233fd581af303f1523
-                </div>
-            </div>
 
-            <div class="idea-card" style="--rotation: -2deg; --hue: 200;">
-                <div class="pin"></div>
-                <h3>AI Defense Security</h3>
-                <p>An AI that tracks data regarding the spies and official documents.</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Ghanasyam I.</span>
-                    <span class="idea-date">Dec 3, 2025</span>
-                </div>
+          <div class="idea-card" style="--rotation: -2deg; --hue: 20">
+            <div class="pin"></div>
+            <h3>Emergency Response Network</h3>
+            <p>
+              Peer-to-peer mesh network app for disaster zones when cell towers
+              go down. Share location, status, and resources.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Elena V.</span>
+              <span class="idea-date">Nov 30, 2025</span>
             </div>
+          </div>
 
-            <div class="idea-card" style="--rotation: 2deg; --hue: 220;">
-                <div class="pin"></div>
-                <h3>fees repayment app</h3>
-                <p>well this starts with the fact that everyone pays fees
-                    they can collect there details and login to there account then with the option of online payment method such as upi, net banking etc
-                    wel the details to be collected are roll no name, student id, hostal id , room no.
-                </p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Chris N.</span>
-                    <span class="idea-date">Nov 30, 2025</span>
-                </div>
+          <div class="idea-card" style="--rotation: 2deg; --hue: 220">
+            <div class="pin"></div>
+            <h3>Skill Swap Platform</h3>
+            <p>
+              Match people who want to exchange skills. You teach me guitar, I
+              teach you Python. No money involved, just learning.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Chris N.</span>
+              <span class="idea-date">Nov 30, 2025</span>
             </div>
-            <div class="idea-card" style="--rotation: -3deg; --hue: 300;">
-                <div class="pin"></div>
-                <h3>Ad-free music player</h3>
-                <p>Hearing ads is irritaatingg😠!!! what iff you could hear hours of music and no one disturbs, nirvana naa🤩. Building such a thing is a true dream✨... lets gooo</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Abhijith S.</span>
-                    <span class="idea-date">Dec 04, 2025</span>
-                </div>
-            </div>
+          </div>
 
-            <div class="idea-card" style="--rotation: -3deg; --hue: 250;">
-                <div class="pin"></div>
-                <h3>CATCH A STAR</h3>
-                <p>Chase all the paths,let it glitter on you,shine like a star</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— ankitha</span>
-                    <span class="idea-date">Dec 4 , 2025</span>
-                </div>
+          <div class="idea-card" style="--rotation: 2deg; --hue: 220">
+            <div class="pin"></div>
+            <h3>Movie Recommendation System</h3>
+            <p>Recommend movies according to your watch history using AI.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Nehal</span>
+              <span class="idea-date">Dec 4, 2025</span>
             </div>
+          </div>
 
-            <div class="idea-card" style="--rotation: 2deg; --hue: 220;">
-                <div class="pin"></div>
-                <h3>Intelligent File Explorer</h3>
-                <p>An explorer which can go deep into files and learn from it , organize itself & sort.</p>
-                <div class="idea-meta">
-                    <span class="idea-author">— Swag V</span>
-                    <span class="idea-date">Dec 4, 2025</span>
-                </div>
-             </div>
-
-            <div class="idea-card" style="--rotation: 2deg; --hue: 220;">
-                <div class="pin"></div>
-                <h3>digital ring</h3>
-                <p> a ring friend ,we can talk to it call throug it  </p>
-                <div class="idea-meta">
-                    <span class="idea-author">ameena jaliya</span>
-                    <span class="idea-date">dec 4, 2025</span>
-                </div>
+          <div class="idea-card" style="--rotation: 2deg; --hue: 274;">
+            <div class="pin"></div>
+            <h3>PartnerGo</h3>
+            <p>Find your Match.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Tohommus</span>
+              <span class="idea-date">Nov 30, 2025</span>
             </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: -1deg; --hue: 120;">
+            <div class="pin"></div>
+            <h3>AI Game</h3>
+            <p>Game for paralysed people detecting motions using neuro chips.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Jeswin</span>
+              <span class="idea-date">Dec 3, 2025</span>
+            </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: -2deg; --hue: 200;">
+            <div class="pin"></div>
+            <h3>AI Defense Security</h3>
+            <p>An AI that tracks data regarding spies and official documents.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Ghanasyam I.</span>
+              <span class="idea-date">Dec 3, 2025</span>
+            </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: 2deg; --hue: 220;">
+            <div class="pin"></div>
+            <h3>Fees Repayment App</h3>
+            <p>
+              Students can collect and manage fee details and pay via UPI/net
+              banking. Fields collected: roll no, name, student id, hostel id,
+              room no.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Chris N.</span>
+              <span class="idea-date">Nov 30, 2025</span>
+            </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: -3deg; --hue: 300;">
+            <div class="pin"></div>
+            <h3>Ad-free Music Player</h3>
+            <p>
+              A frustration-free music player for listening without ads — a
+              cleaner, distraction-free UX.
+            </p>
+            <div class="idea-meta">
+              <span class="idea-author">— Abhijith S.</span>
+              <span class="idea-date">Dec 4, 2025</span>
+            </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: 3deg; --hue: 180;">
+            <div class="pin"></div>
+            <h3>AI Interview Assistant</h3>
+            <p>A live AI assistant that helps you prepare and clear your next interview.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Jeremy J.</span>
+              <span class="idea-date">Dec 4, 2025</span>
+            </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: -3deg; --hue: 250;">
+            <div class="pin"></div>
+            <h3>CATCH A STAR</h3>
+            <p>Chase all the paths; let it glitter on you — shine like a star.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Ankitha</span>
+              <span class="idea-date">Dec 4, 2025</span>
+            </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: 2deg; --hue: 220;">
+            <div class="pin"></div>
+            <h3>Intelligent File Explorer</h3>
+            <p>An explorer which can go deep into files, learn from them, organize itself & auto-sort.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Swag V</span>
+              <span class="idea-date">Dec 4, 2025</span>
+            </div>
+          </div>
+
+          <div class="idea-card" style="--rotation: 2deg; --hue: 220;">
+            <div class="pin"></div>
+            <h3>Digital Ring</h3>
+            <p>A wearable ring that acts as a voice assistant — make calls and interact hands-free.</p>
+            <div class="idea-meta">
+              <span class="idea-author">— Ameena Jaliya</span>
+              <span class="idea-date">Dec 4, 2025</span>
+            </div>
+          </div>
         </div>
       </div>
     </main>
